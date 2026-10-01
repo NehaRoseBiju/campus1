@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>{{ title }}</h2>
+
+<form method="GET">
+    <input type="text" name="search" placeholder="Search Title or Location">
+
+    <select name="priority">
+        <option value="">All Priority</option>
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+    </select>
+
+    <select name="status">
+        <option value="">All Status</option>
+        <option value="pending">Pending</option>
+        <option value="in_progress">In Progress</option>
+        <option value="completed">Completed</option>
+    </select>
+
+    <button type="submit">Search / Filter</button>
+</form>
+
+<br>
+
+<table border="1" cellpadding="6">
+    <tr>
+        <th>Title</th>
+        <th>Location</th>
+        <th>Priority</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for r in requests %}
+    <tr>
+        <td>{{ r.title }}</td>
+        <td>{{ r.location }}</td>
+        <td>{{ r.get_priority_display }}</td>
+        <td>{{ r.get_status_display }}</td>
+        <td>
+            {% if staff %}
+                <a href="{% url 'staff_update_status' r.pk %}">Update Status</a>
+            {% else %}
+                <a href="{% url 'edit_request' r.pk %}">Edit</a>
+
+                <form method="post"
+                      action="{% url 'delete_request' r.pk %}"
+                      style="display:inline">
+                    {% csrf_token %}
+                    <button type="submit">Delete</button>
+                </form>
+            {% endif %}
+        </td>
+    </tr>
+
+    {% empty %}
+    <tr>
+        <td colspan="5">No requests found.</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}
+

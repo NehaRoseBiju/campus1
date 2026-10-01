@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus Maintenance</title>
+<style>
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+body{
+    font-family:'Segoe UI',sans-serif;
+    background:#f4f7fc;
+    color:#333;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+/* ---------- Navbar ---------- */
+nav{
+    background:linear-gradient(135deg,#003366,#0055aa);
+    padding:15px 50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+.logo{ color:white; font-size:22px; font-weight:600; }
+.nav-links a{
+    color:white;
+    text-decoration:none;
+    margin-left:25px;
+    font-weight:500;
+    transition:0.3s;
+}
+.nav-links a:hover{ color:#ffd700; }
+
+/* ---------- Main content card ---------- */
+.container{
+    width:90%;
+    max-width:1000px;
+    margin:30px auto;
+    padding:30px;
+    background:white;
+    border-radius:12px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    flex:1;
+    overflow-x:auto;
+}
+h1, h2{ color:#003366; margin-bottom:15px; }
+p{ margin-bottom:10px; line-height:1.5; }
+
+/* ---------- Forms ---------- */
+form p{ margin-bottom:5px; }
+label{ font-weight:600; font-size:14px; }
+input, select, textarea{
+    width:100%;
+    padding:12px;
+    margin-top:6px;
+    margin-bottom:12px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-family:inherit;
+    font-size:15px;
+}
+input:focus, select:focus, textarea:focus{
+    outline:none;
+    border-color:#0055aa;
+    box-shadow:0 0 0 3px rgba(0,85,170,0.15);
+}
+.helptext, form ul{
+    display:block;
+    font-size:12px;
+    color:#777;
+    margin-bottom:10px;
+    padding-left:16px;
+}
+.errorlist{ color:#dc3545; font-size:13px; list-style:none; padding-left:0; }
+
+/* ---------- Buttons ---------- */
+button{
+    padding:10px 18px;
+    background:#0055aa;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:15px;
+    transition:0.3s;
+}
+button:hover{ background:#003f80; }
+
+/* ---------- Tables ---------- */
+table{ width:100%; border-collapse:collapse; margin-top:10px; border:none; }
+th, td{ padding:12px 10px; text-align:left; border:none; border-bottom:1px solid #e3e8f0; }
+th{ background:#eef3fa; color:#003366; }
+tr:hover td{ background:#f9fbfe; }
+
+/* Action links in tables look like buttons (Edit / Update Status) */
+td a{
+    display:inline-block;
+    padding:7px 14px;
+    background:#28a745;
+    color:white;
+    text-decoration:none;
+    border-radius:5px;
+    font-size:14px;
+    margin-right:5px;
+}
+td a:hover{ opacity:0.85; }
+
+/* Delete button inside table = red */
+td form button{ background:#dc3545; padding:7px 14px; font-size:14px; }
+td form button:hover{ background:#b02a37; }
+
+/* ---------- Footer ---------- */
+footer{
+    background:#003366;
+    color:white;
+    text-align:center;
+    padding:15px;
+    margin-top:30px;
+}
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">🛠 CampusFix</div>
+    <div class="nav-links">
+        <a href="{% url 'home' %}">Home</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'submit_request' %}">Submit</a>
+            <a href="{% url 'my_requests' %}">My Requests</a>
+            {% if user.is_staff %}<a href="{% url 'staff_dashboard' %}">Staff</a>{% endif %}
+            <a href="{% url 'logout' %}">Logout ({{ user.username }})</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </div>
+</nav>
+
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+
+<footer>© 2026 Campus Maintenance System | Developed using Django</footer>
+
+</body>
+</html>
